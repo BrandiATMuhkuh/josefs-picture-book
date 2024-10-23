@@ -118,9 +118,7 @@ Please output everything as json`,
   );
 
   const audios = await Promise.all(
-    paragraphs.paragraphs.map((e) =>
-      generateAudio(e.index, e.image_description)
-    )
+    paragraphs.paragraphs.map((e) => generateAudio(e.index, e.text))
   );
 
   // apply generate audio and video to object
@@ -142,7 +140,11 @@ async function generatePicture(index: number, text: string) {
     prompt: text,
     n: 1,
     size: "1024x1024",
+    // @ts-ignore
+    gen_id: "2343234234",
   });
+
+  response._request_id;
   return { index, imageBase64: response.data[0].url ?? "" };
 }
 
