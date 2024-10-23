@@ -1,44 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
-// Mock data for the story
-const storyPages = [
-  {
-    text: "Once upon a time, in a lush green forest, there lived a curious little rabbit named Hoppy.",
-    imageUrl: "/placeholder.svg?height=300&width=400"
-  },
-  {
-    text: "Hoppy loved to explore the forest and make new friends with all the woodland creatures.",
-    imageUrl: "/placeholder.svg?height=300&width=400"
-  },
-  {
-    text: "One day, Hoppy discovered a magical clearing filled with glowing flowers of every color.",
-    imageUrl: "/placeholder.svg?height=300&width=400"
-  },
-  {
-    text: "The flowers whispered secrets of the forest, teaching Hoppy about the importance of friendship and bravery.",
-    imageUrl: "/placeholder.svg?height=300&width=400"
-  },
-  {
-    text: "From that day on, Hoppy shared the flowers' wisdom with all his forest friends, making the woodland a happier place for everyone.",
-    imageUrl: "/placeholder.svg?height=300&width=400"
-  }
-]
+import storyPages from "./mockdata";
 
 export function StoryDisplayComponent() {
-  const [currentPage, setCurrentPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0);
 
   const goToNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, storyPages.length - 1))
-  }
+    setCurrentPage((prev) => Math.min(prev + 1, storyPages.length - 1));
+  };
 
   const goToPreviousPage = () => {
-    setCurrentPage((prev) => Math.max(prev - 1, 0))
-  }
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -46,12 +24,14 @@ export function StoryDisplayComponent() {
         <CardContent className="p-6">
           <div className="aspect-w-4 aspect-h-3 mb-4">
             <img
-              src={storyPages[currentPage].imageUrl}
+              src={storyPages[currentPage].imageBase64}
               alt={`Story illustration ${currentPage + 1}`}
               className="rounded-lg object-cover w-full h-full"
             />
           </div>
-          <p className="text-lg text-center mb-4">{storyPages[currentPage].text}</p>
+          <p className="text-lg text-center mb-4">
+            {storyPages[currentPage].text}
+          </p>
           <div className="flex justify-between items-center">
             <Button
               onClick={goToPreviousPage}
@@ -74,5 +54,5 @@ export function StoryDisplayComponent() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

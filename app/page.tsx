@@ -1,9 +1,10 @@
-import { VoiceRecorderComponent } from "@/components/voice-recorder";
+// import { VoiceRecorderComponent } from "@/components/voice-recorder";
+import { StoryDisplayComponent } from "@/components/story-display";
 import Image from "next/image";
 
 export default function Abc() {
-  // return <StoryDisplayComponent />;
-  return <VoiceRecorderComponent />;
+  return <StoryDisplayComponent />;
+  // return <VoiceRecorderComponent />;
 }
 
 export function Home() {
