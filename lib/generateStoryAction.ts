@@ -137,9 +137,24 @@ Please output everything as json`,
 }
 
 async function generatePicture(index: number, text: string) {
-  return { index, imageBase64: `i${Math.random()}` };
+  const response = await client.images.generate({
+    model: "dall-e-3",
+    prompt: text,
+    n: 1,
+    size: "1024x1024",
+  });
+  return { index, imageBase64: response.data[0].url ?? "" };
 }
 
 async function generateAudio(index: number, text: string) {
-  return { index, audioBase64: `a${Math.random()}` };
+  const aac = await client.audio.speech.create({
+    model: "tts-1",
+    voice: "onyx",
+    input: text,
+    response_format: "mp3",
+  });
+
+  const audioBase64 = Buffer.from(await aac.arrayBuffer()).toString("base64");
+
+  return { index, audioBase64 };
 }
