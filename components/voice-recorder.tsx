@@ -12,6 +12,7 @@ import { generateStoryAction } from "@/lib/generateStoryAction";
 import { Paragraph } from "@/lib/types";
 import { Loader2, Mic, Square } from "lucide-react";
 import { useRef, useState } from "react";
+export const maxDuration = 60; // This function can run for a maximum of 5 seconds
 
 type props = {
   onParagraphs: (paragraphs: Paragraph[]) => void;
