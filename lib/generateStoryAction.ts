@@ -137,7 +137,6 @@ async function generatePicture(index: number, text: string) {
     size: "1024x1024",
   });
 
-  response._request_id;
   return { index, imageBase64: response.data[0].url ?? "" };
 }
 
