@@ -9,35 +9,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { generateStoryAction } from "@/lib/generateStoryAction";
+import { Paragraph } from "@/lib/types";
 import { Loader2, Mic, Square } from "lucide-react";
 import { useRef, useState } from "react";
 
-export function VoiceRecorderComponent() {
+type props = {
+  onParagraphs: (paragraphs: Paragraph[]) => void;
+};
+
+export function VoiceRecorderComponent({ onParagraphs }: props) {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-
-  // useEffect(() => {
-  //   navigator.mediaDevices
-  //     .getUserMedia({ audio: true })
-  //     .then((stream) => {
-  //       mediaRecorderRef.current = new MediaRecorder(stream);
-
-  //       mediaRecorderRef.current.ondataavailable = (event) => {
-  //         audioChunksRef.current.push(event.data);
-  //       };
-
-  //       mediaRecorderRef.current.onstop = () => {
-  //         const audioBlob = new Blob(audioChunksRef.current, {
-  //           type: "audio/wav",
-  //         });
-  //         audioChunksRef.current = [];
-  //         // handleAudioUpload(audioBlob);
-  //       };
-  //     })
-  //     .catch((err) => console.error("Error accessing microphone:", err));
-  // }, []);
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -80,6 +64,7 @@ export function VoiceRecorderComponent() {
     formData.append("file", audioBlob, "audio.wav");
     const store = await generateStoryAction(formData);
     console.log("the story", store);
+    onParagraphs(store.paragraphs);
     setIsProcessing(false);
   };
 

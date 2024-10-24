@@ -1,10 +1,16 @@
-// import { VoiceRecorderComponent } from "@/components/voice-recorder";
+"use client";
 import { StoryDisplayComponent } from "@/components/story-display";
+import { VoiceRecorderComponent } from "@/components/voice-recorder";
+import { Paragraph } from "@/lib/types";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Abc() {
-  return <StoryDisplayComponent />;
-  // return <VoiceRecorderComponent />;
+  const [paragraphs, setParagraphs] = useState<Paragraph[]>([]);
+  if (paragraphs.length) {
+    return <StoryDisplayComponent paragraphs={paragraphs} />;
+  }
+  return <VoiceRecorderComponent onParagraphs={setParagraphs} />;
 }
 
 export function Home() {

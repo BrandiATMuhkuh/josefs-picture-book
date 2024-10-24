@@ -6,16 +6,20 @@ import { Switch } from "@/components/ui/switch";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import storyPages from "./mockdata";
+import { Paragraph } from "@/lib/types";
 
-export function StoryDisplayComponent() {
+export function StoryDisplayComponent({
+  paragraphs,
+}: {
+  paragraphs: Paragraph[];
+}) {
   const [currentPage, setCurrentPage] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     audioRef.current = new Audio(
-      "data:audio/wav;base64," + storyPages[currentPage].audioBase64
+      "data:audio/wav;base64," + paragraphs[currentPage].audioBase64
     );
     audioRef.current.addEventListener("ended", handleAudioEnded);
 
@@ -35,7 +39,7 @@ export function StoryDisplayComponent() {
   }, [isAutoPlaying, currentPage]);
 
   const handleAudioEnded = () => {
-    if (currentPage < storyPages.length - 1) {
+    if (currentPage < paragraphs.length - 1) {
       goToNextPage();
     } else {
       setIsAutoPlaying(false);
@@ -43,7 +47,7 @@ export function StoryDisplayComponent() {
   };
 
   const goToNextPage = () => {
-    setCurrentPage((prev) => Math.min(prev + 1, storyPages.length - 1));
+    setCurrentPage((prev) => Math.min(prev + 1, paragraphs.length - 1));
   };
 
   const goToPreviousPage = () => {
@@ -60,13 +64,13 @@ export function StoryDisplayComponent() {
         <CardContent className="p-6">
           <div className="aspect-w-4 aspect-h-3 mb-4">
             <img
-              src={storyPages[currentPage].imageBase64}
+              src={paragraphs[currentPage].imageBase64}
               alt={`Story illustration ${currentPage + 1}`}
               className="rounded-lg object-cover w-full h-full"
             />
           </div>
           <p className="text-lg text-center mb-4">
-            {storyPages[currentPage].text}
+            {paragraphs[currentPage].text}
           </p>
           <div className="flex justify-between items-center mb-4">
             <Button
@@ -77,11 +81,11 @@ export function StoryDisplayComponent() {
               <ChevronLeft className="mr-2 h-4 w-4" /> Previous
             </Button>
             <span className="text-sm text-gray-500">
-              Page {currentPage + 1} of {storyPages.length}
+              Page {currentPage + 1} of {paragraphs.length}
             </span>
             <Button
               onClick={goToNextPage}
-              disabled={currentPage === storyPages.length - 1 || isAutoPlaying}
+              disabled={currentPage === paragraphs.length - 1 || isAutoPlaying}
               variant="outline"
             >
               Next <ChevronRight className="ml-2 h-4 w-4" />

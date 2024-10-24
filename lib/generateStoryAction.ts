@@ -1,5 +1,6 @@
 "use server";
 import OpenAI from "openai";
+import { Paragraph } from "./types";
 
 const client = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"], // This is the default and can be omitted
@@ -102,13 +103,7 @@ Please output everything as json`,
   });
 
   const paragraphs = JSON.parse(response.choices[0].message.content!) as {
-    paragraphs: {
-      index: number;
-      text: string;
-      image_description: string;
-      imageBase64: string;
-      audioBase64: string;
-    }[];
+    paragraphs: Paragraph[];
   };
 
   const images = await Promise.all(
@@ -140,8 +135,6 @@ async function generatePicture(index: number, text: string) {
     prompt: text,
     n: 1,
     size: "1024x1024",
-    // @ts-ignore
-    gen_id: "2343234234",
   });
 
   response._request_id;
