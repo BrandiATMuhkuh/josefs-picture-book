@@ -1,10 +1,10 @@
 "use server";
 import openai from "@/lib/clientAi";
-import { Page, PictureBook } from "@/lib/types";
+import { Page, StoryBook } from "@/lib/types";
 import { z } from "zod";
 
 export default async function pageToImage(
-  pictureBook: z.infer<typeof PictureBook>,
+  pictureBook: z.infer<typeof StoryBook>,
   page: z.infer<typeof Page>
 ) {
   const prompt = `

@@ -1,6 +1,6 @@
 "use server";
 import openai from "@/lib/clientAi";
-import { PictureBook } from "@/lib/types";
+import { StoryBook } from "@/lib/types";
 
 import { zodResponseFormat } from "openai/helpers/zod";
 
@@ -45,7 +45,7 @@ Please output everything as json`,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
-    response_format: zodResponseFormat(PictureBook, "picture_book_paragraphs"),
+    response_format: zodResponseFormat(StoryBook, "picture_book_paragraphs"),
   });
 
   const storyBook = response.choices[0].message.parsed!;

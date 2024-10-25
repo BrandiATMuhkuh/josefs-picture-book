@@ -30,7 +30,7 @@ export const Page = z.object(
   }
 );
 
-export const PictureBook = z.object({
+export const StoryBook = z.object({
   language: z.string({ description: "Language used in the story" }),
   title: z.string({ description: "The title of the story" }),
   authors: z.array(z.string()),
