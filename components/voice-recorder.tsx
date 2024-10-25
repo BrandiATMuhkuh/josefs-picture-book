@@ -8,17 +8,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { generateStoryAction } from "@/lib/generateStoryAction";
-import { Paragraph } from "@/lib/types";
+import pageToAudio from "@/lib/actions/pageToAudio";
+import pageToImage from "@/lib/actions/pageToImage";
+import speechToText from "@/lib/actions/speechToText";
+import textToStory from "@/lib/actions/textToStory";
+import { PictureBook } from "@/lib/types";
 import { Loader2, Mic, Square } from "lucide-react";
 import { useRef, useState } from "react";
+import { z } from "zod";
 export const maxDuration = 60; // This function can run for a maximum of 5 seconds
 
 type props = {
-  onParagraphs: (paragraphs: Paragraph[]) => void;
+  onPictureBook: (pictureBook: z.infer<typeof PictureBook>) => void;
 };
 
-export function VoiceRecorderComponent({ onParagraphs }: props) {
+export function VoiceRecorderComponent({ onPictureBook }: props) {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -58,14 +62,46 @@ export function VoiceRecorderComponent({ onParagraphs }: props) {
 
   const handleAudioUpload = async (audioBlob: Blob) => {
     setIsProcessing(true);
-    // Here you would typically upload the audio file to your server
-    // and trigger the AI story generation process
-    console.log("Audio recorded, ready for upload and processing");
+
+    // TTS
     const formData = new FormData();
     formData.append("file", audioBlob, "audio.wav");
-    const store = await generateStoryAction(formData);
-    console.log("the story", store);
-    onParagraphs(store.paragraphs);
+    const text = await speechToText(formData);
+
+    // make request to backend with mock data for now
+    const storyBook = await textToStory(text, 3);
+    console.log("story", storyBook);
+
+    const pictureBook = PictureBook.parse(storyBook);
+
+    const ps: Promise<string>[] = [];
+    const ps3: Promise<string>[] = [];
+    for (const page of pictureBook.pages) {
+      console.log("start the loop");
+      ps.push(pageToImage(storyBook, page));
+      console.log("create image", page.pageNumber);
+      ps3.push(pageToAudio(page));
+      console.log("create image", page.pageNumber);
+    }
+
+    const images64 = await Promise.all(ps);
+    const audio64 = await Promise.all(ps3);
+
+    // const [images64, audio64] = await Promise.all([
+    //   Promise.all(
+    //     pictureBook.pages.map((page) => pageToImage(storyBook, page))
+    //   ),
+
+    //   Promise.all(pictureBook.pages.map((page) => pageToAudio(page))),
+    // ]);
+
+    for (let i = 0; i < pictureBook.pages.length; i = i + 1) {
+      pictureBook.pages[i].image64 = images64[i];
+      pictureBook.pages[i].audio64 = audio64[i];
+    }
+
+    onPictureBook(pictureBook);
+
     setIsProcessing(false);
   };
 

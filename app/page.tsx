@@ -1,15 +1,16 @@
 "use client";
 import { StoryDisplayComponent } from "@/components/story-display";
 import { VoiceRecorderComponent } from "@/components/voice-recorder";
-import { Paragraph } from "@/lib/types";
+import { PictureBook } from "@/lib/types";
 import { useState } from "react";
 
-import mockTwo from "@/components/mockTwo";
+import { z } from "zod";
 
 export default function Home() {
-  const [paragraphs, setParagraphs] = useState<Paragraph[]>([]);
-  if (mockTwo) {
-    return <StoryDisplayComponent paragraphs={mockTwo} />;
+  const [pictureBook, setPictureBook] = useState<z.infer<typeof PictureBook>>();
+  console.log("pictureBook", pictureBook);
+  if (pictureBook) {
+    return <StoryDisplayComponent paragraphs={pictureBook} />;
   }
-  return <VoiceRecorderComponent onParagraphs={setParagraphs} />;
+  return <VoiceRecorderComponent onPictureBook={setPictureBook} />;
 }
