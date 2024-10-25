@@ -20,7 +20,7 @@ export const Page = z.object(
   {
     pageNumber: z.number({ description: "The number of the page" }),
     text: z.string({ description: "The text of this page" }),
-    img: z.string({
+    imagePrompt: z.string({
       description: "A genAI prompt that describes the scene of this page",
     }),
   },
@@ -42,4 +42,13 @@ export const StoryBook = z.object({
       "A genAI prompt that describes in detail how the style of the images generated shoudl be like. ",
   }),
   pages: z.array(Page),
+});
+
+export const Page64 = Page.extend({
+  audio64: z.string().default(""),
+  image64: z.string().default(""),
+});
+
+export const PictureBook = StoryBook.extend({
+  pages: z.array(Page64),
 });

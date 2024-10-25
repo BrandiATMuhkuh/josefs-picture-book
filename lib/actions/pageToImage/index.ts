@@ -14,7 +14,7 @@ The prompt will include all possible characters and their detailed description (
 - World Style: ${pictureBook.style}
 - Charactres: ${JSON.stringify(pictureBook.characters, null, 2)}
 
-- Scene: ${page.img}
+- Scene: ${page.imagePrompt}
 
 Extra style info: The audiance is 6 years old. Keep drawing simple. Like a Comic!
     `;
