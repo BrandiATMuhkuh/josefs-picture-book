@@ -26,10 +26,11 @@ Extra style info: The audiance is 6 years old. Keep drawing simple. Like a Comic
     size: "1024x1024",
     quality: "standard",
     style: "vivid",
+    response_format: "b64_json",
   });
 
-  const ret = { prompt, resp: response.data[0].url ?? "" };
+  const ret = { prompt, resp: response.data[0].b64_json ?? "" };
   console.log("ret", ret);
 
-  return ret;
+  return response.data[0].b64_json!;
 }

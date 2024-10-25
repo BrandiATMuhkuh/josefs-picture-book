@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import pageToImage from "@/lib/actions/pageToImage";
+import pageToAudio from "@/lib/actions/pageToAudio";
 import textToStory from "@/lib/actions/textToStory";
 
 export default function Testing() {
@@ -14,9 +14,13 @@ export default function Testing() {
           );
           console.log("story", story);
 
+          // for (const page of story.pages.slice(0, 1)) {
+          //   const img64 = await pageToImage(story, page);
+          // }
+
           for (const page of story.pages.slice(0, 1)) {
-            const img = await pageToImage(story, page);
-            console.log("img", img);
+            const voice64 = await pageToAudio(page);
+            console.log("voice64", voice64);
           }
         }}
       >
