@@ -1,10 +1,6 @@
 "use server";
-import OpenAI from "openai";
+import openai from "./clientAi";
 import { Paragraph } from "./types";
-
-const client = new OpenAI({
-  apiKey: process.env["OPENAI_API_KEY"], // This is the default and can be omitted
-});
 
 const paragraphCount = 3;
 
@@ -18,7 +14,7 @@ export async function generateStoryAction(formData: FormData) {
   }
 
   // Lets convert the audio to it's text form
-  const transcription = await client.audio.transcriptions.create({
+  const transcription = await openai.audio.transcriptions.create({
     file: audioBlob,
     model: "whisper-1",
   });
@@ -26,7 +22,7 @@ export async function generateStoryAction(formData: FormData) {
   console.log(transcription.text);
 
   // at this point we ask the AI to genrate a story for us, and prompts for the images
-  const response = await client.chat.completions.create({
+  const response = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [
       {
@@ -130,7 +126,7 @@ Please output everything as json`,
 }
 
 async function generatePicture(index: number, text: string) {
-  const response = await client.images.generate({
+  const response = await openai.images.generate({
     model: "dall-e-3",
     prompt: text,
     n: 1,
@@ -141,7 +137,7 @@ async function generatePicture(index: number, text: string) {
 }
 
 async function generateAudio(index: number, text: string) {
-  const aac = await client.audio.speech.create({
+  const aac = await openai.audio.speech.create({
     model: "tts-1",
     voice: "onyx",
     input: text,
