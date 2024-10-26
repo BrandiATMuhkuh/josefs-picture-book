@@ -5,6 +5,7 @@ import beingdone from "@/app/images/beingdone.webp";
 import recodingImage from "@/app/images/recoding.webp";
 import storytelling from "@/app/images/storytelling.webp";
 import transcribing from "@/app/images/transcribing.webp";
+import Image from "next/image"; // Import the Next.js Image component
 
 import { Button } from "@/components/ui/button";
 import {
@@ -36,13 +37,13 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
-  let imgSrc = recodingImage.src;
-  if (state === "WAITING") imgSrc = recodingImage.src;
-  if (state === "RECORDING") imgSrc = recodingImage.src;
-  if (state === "TRANSCRIBING") imgSrc = transcribing.src;
-  if (state === "STORY") imgSrc = storytelling.src;
-  if (state === "ASSETS") imgSrc = assets.src;
-  if (state === "DONE") imgSrc = beingdone.src;
+  let imgSrc = recodingImage;
+  if (state === "WAITING") imgSrc = recodingImage;
+  if (state === "RECORDING") imgSrc = recodingImage;
+  if (state === "TRANSCRIBING") imgSrc = transcribing;
+  if (state === "STORY") imgSrc = storytelling;
+  if (state === "ASSETS") imgSrc = assets;
+  if (state === "DONE") imgSrc = beingdone;
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -131,7 +132,7 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
         </CardHeader>
         <CardContent className="p-6">
           <div className="aspect-w-4 aspect-h-3 mb-4">
-            <img
+            <Image
               src={imgSrc}
               alt={"A child recording"}
               className={cn(
