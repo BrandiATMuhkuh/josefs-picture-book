@@ -124,7 +124,7 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col items-center justify-center h-full bg-gray-100 p-4">
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle>Tell Your Story</CardTitle>

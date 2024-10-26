@@ -28,7 +28,49 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="min-h-screen flex flex-col bg-gray-100">
+          <header className="bg-white shadow-sm">
+            <div className="max-w-7xl mx-auto py-1 px-4 sm:px-6 lg:px-8">
+              <h1 className="text-center text-1xl font-bold text-gray-900">
+                Josef's picture book
+              </h1>
+            </div>
+          </header>
+          <main className="flex-grow container mx-auto py-8">{children}</main>
+          <footer className="bg-white shadow-sm mt-8">
+            <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+              <p className="text-center text-sm text-gray-500">
+                Made with love for Josef ❤️ | By{" "}
+                <a
+                  href="https://brandstetter.io/Resume_Brandstetter_Jurgen.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Jurgen Brandstetter
+                </a>{" "}
+                |
+                <a
+                  href="https://www.linkedin.com/in/j-brandstetter/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-yellow-200 px-2 py-1 rounded-md underline font-bold text-gray-900"
+                >
+                  Open to Work
+                </a>
+                |{" "}
+                <a
+                  href="https://github.com/BrandiATMuhkuh/josefs-picture-book"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Source
+                </a>
+              </p>
+            </div>
+          </footer>
+        </div>
       </body>
     </html>
   );
