@@ -14,9 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import pageToAudio from "@/lib/actions/pageToAudio";
-import pageToImage from "@/lib/actions/pageToImage";
 import speechToText from "@/lib/actions/speechToText";
+import storyToPictureBook from "@/lib/actions/storyToPictureBook";
 import textToStory from "@/lib/actions/textToStory";
 import { PictureBook } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -31,19 +30,19 @@ type props = {
 
 export function VoiceRecorderComponent({ onPictureBook }: props) {
   // const [isRecording, setIsRecording] = useState(false);
-  const [isProcessing, setIsProcessing] = useState<
+  const [state, setState] = useState<
     "WAITING" | "RECORDING" | "TRANSCRIBING" | "STORY" | "ASSETS" | "DONE"
   >("WAITING");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
   let imgSrc = recodingImage.src;
-  if (isProcessing === "WAITING") imgSrc = recodingImage.src;
-  if (isProcessing === "RECORDING") imgSrc = recodingImage.src;
-  if (isProcessing === "TRANSCRIBING") imgSrc = transcribing.src;
-  if (isProcessing === "STORY") imgSrc = storytelling.src;
-  if (isProcessing === "ASSETS") imgSrc = assets.src;
-  if (isProcessing === "DONE") imgSrc = beingdone.src;
+  if (state === "WAITING") imgSrc = recodingImage.src;
+  if (state === "RECORDING") imgSrc = recodingImage.src;
+  if (state === "TRANSCRIBING") imgSrc = transcribing.src;
+  if (state === "STORY") imgSrc = storytelling.src;
+  if (state === "ASSETS") imgSrc = assets.src;
+  if (state === "DONE") imgSrc = beingdone.src;
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -72,7 +71,7 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
     }, 10000);
 
     // setIsRecording(true);
-    setIsProcessing("RECORDING");
+    setState("RECORDING");
   };
 
   const stopRecording = () => {
@@ -86,39 +85,41 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
   };
 
   const handleAudioUpload = async (audioBlob: Blob) => {
-    setIsProcessing("TRANSCRIBING");
+    setState("TRANSCRIBING");
 
     // TTS
     const formData = new FormData();
     formData.append("file", audioBlob, "audio.wav");
     const text = await speechToText(formData);
     console.log("Transcribed Text", text);
-    setIsProcessing("STORY");
+    setState("STORY");
     // make request to backend with mock data for now
     const storyBook = await textToStory(text, 3);
     console.log("story", storyBook);
 
-    const pictureBook = PictureBook.parse(storyBook);
+    setState("ASSETS");
+    const pictureBook = await storyToPictureBook(PictureBook.parse(storyBook));
 
-    setIsProcessing("ASSETS");
-    const ps: Promise<string>[] = [];
-    const ps3: Promise<string>[] = [];
-    for (const page of pictureBook.pages) {
-      console.log("start the loop");
-      ps.push(pageToImage(storyBook, page));
-      console.log("create image", page.pageNumber);
-      ps3.push(pageToAudio(page));
-      console.log("create image", page.pageNumber);
-    }
+    // const pictureBook = PictureBook.parse(storyBook);
 
-    const images64 = await Promise.all(ps);
-    const audio64 = await Promise.all(ps3);
+    // const ps: Promise<string>[] = [];
+    // const ps3: Promise<string>[] = [];
+    // for (const page of pictureBook.pages) {
+    //   console.log("start the loop");
+    //   ps.push(pageToImage(storyBook, page));
+    //   console.log("create image", page.pageNumber);
+    //   ps3.push(pageToAudio(page));
+    //   console.log("create image", page.pageNumber);
+    // }
 
-    for (let i = 0; i < pictureBook.pages.length; i = i + 1) {
-      pictureBook.pages[i].image64 = images64[i];
-      pictureBook.pages[i].audio64 = audio64[i];
-    }
-    setIsProcessing("DONE");
+    // const images64 = await Promise.all(ps);
+    // const audio64 = await Promise.all(ps3);
+
+    // for (let i = 0; i < pictureBook.pages.length; i = i + 1) {
+    //   pictureBook.pages[i].image64 = images64[i];
+    //   pictureBook.pages[i].audio64 = audio64[i];
+    // }
+    setState("DONE");
     onPictureBook(pictureBook);
   };
 
@@ -135,41 +136,41 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
               alt={"A child recording"}
               className={cn(
                 "rounded-lg object-cover w-full h-full",
-                isProcessing !== "WAITING" ? "animate-pulse" : undefined
+                state !== "WAITING" ? "animate-pulse" : undefined
               )}
             />
           </div>
         </CardContent>
         <CardFooter>
           <div className="flex items-center justify-center w-full">
-            {isProcessing === "WAITING" && (
+            {state === "WAITING" && (
               <Button onClick={startRecording}>
                 <Mic className="mr-2 h-4 w-4" /> Record your story idea
               </Button>
             )}
-            {isProcessing === "RECORDING" && (
+            {state === "RECORDING" && (
               <Button onClick={stopRecording} variant="destructive">
                 <Square className="mr-2 h-4 w-4" /> Stop Recording
               </Button>
             )}
-            {isProcessing === "TRANSCRIBING" && (
+            {state === "TRANSCRIBING" && (
               <Button disabled>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Transcribing
               </Button>
             )}
-            {isProcessing === "STORY" && (
+            {state === "STORY" && (
               <Button disabled>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating
                 Story
               </Button>
             )}
-            {isProcessing === "ASSETS" && (
+            {state === "ASSETS" && (
               <Button disabled>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating
                 Images and Audio
               </Button>
             )}
-            {isProcessing === "DONE" && <Button>Done</Button>}
+            {state === "DONE" && <Button>Done</Button>}
           </div>
         </CardFooter>
       </Card>
