@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -62,6 +68,9 @@ export function StoryDisplayComponent({
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle>{paragraphs.title}</CardTitle>
+        </CardHeader>
         <CardContent className="p-6">
           <div className="aspect-w-4 aspect-h-3 mb-4">
             <img

@@ -1,5 +1,11 @@
 "use client";
 
+import assets from "@/app/images/assets.webp";
+import beingdone from "@/app/images/beingdone.webp";
+import recodingImage from "@/app/images/recoding.webp";
+import storytelling from "@/app/images/storytelling.webp";
+import transcribing from "@/app/images/transcribing.webp";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +19,7 @@ import pageToImage from "@/lib/actions/pageToImage";
 import speechToText from "@/lib/actions/speechToText";
 import textToStory from "@/lib/actions/textToStory";
 import { PictureBook } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { Loader2, Mic, Square } from "lucide-react";
 import { useRef, useState } from "react";
 import { z } from "zod";
@@ -23,10 +30,20 @@ type props = {
 };
 
 export function VoiceRecorderComponent({ onPictureBook }: props) {
-  const [isRecording, setIsRecording] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
+  // const [isRecording, setIsRecording] = useState(false);
+  const [isProcessing, setIsProcessing] = useState<
+    "WAITING" | "RECORDING" | "TRANSCRIBING" | "STORY" | "ASSETS" | "DONE"
+  >("WAITING");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+
+  let imgSrc = recodingImage.src;
+  if (isProcessing === "WAITING") imgSrc = recodingImage.src;
+  if (isProcessing === "RECORDING") imgSrc = recodingImage.src;
+  if (isProcessing === "TRANSCRIBING") imgSrc = transcribing.src;
+  if (isProcessing === "STORY") imgSrc = storytelling.src;
+  if (isProcessing === "ASSETS") imgSrc = assets.src;
+  if (isProcessing === "DONE") imgSrc = beingdone.src;
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -46,7 +63,16 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
     };
     mediaRecorderRef.current.start();
 
-    setIsRecording(true);
+    // make sure people can only recording for 10 seconds
+    setTimeout(() => {
+      console.log("timeout");
+      if (mediaRecorderRef.current?.state === "recording") {
+        stopRecording();
+      }
+    }, 10000);
+
+    // setIsRecording(true);
+    setIsProcessing("RECORDING");
   };
 
   const stopRecording = () => {
@@ -56,24 +82,26 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
         .getTracks()
         .forEach((track) => track.stop());
       mediaRecorderRef.current = null; // Clear the media stream reference
-      setIsRecording(false);
     }
   };
 
   const handleAudioUpload = async (audioBlob: Blob) => {
-    setIsProcessing(true);
+    setIsProcessing("TRANSCRIBING");
 
     // TTS
     const formData = new FormData();
     formData.append("file", audioBlob, "audio.wav");
     const text = await speechToText(formData);
+    console.log("Transcribed Text", text);
 
+    setIsProcessing("STORY");
     // make request to backend with mock data for now
     const storyBook = await textToStory(text, 3);
     console.log("story", storyBook);
 
     const pictureBook = PictureBook.parse(storyBook);
 
+    setIsProcessing("ASSETS");
     const ps: Promise<string>[] = [];
     const ps3: Promise<string>[] = [];
     for (const page of pictureBook.pages) {
@@ -91,46 +119,61 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
       pictureBook.pages[i].image64 = images64[i];
       pictureBook.pages[i].audio64 = audio64[i];
     }
-
+    setIsProcessing("DONE");
     onPictureBook(pictureBook);
-
-    setIsProcessing(false);
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>Tell Your Story</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-center mb-4">
-          {isRecording
-            ? "Recording your story..."
-            : "Click to start recording your story idea"}
-        </p>
-        <div className="flex justify-center">
-          {isRecording ? (
-            <Button onClick={stopRecording} variant="destructive">
-              <Square className="mr-2 h-4 w-4" /> Stop Recording
-            </Button>
-          ) : (
-            <Button onClick={startRecording} disabled={isProcessing}>
-              <Mic className="mr-2 h-4 w-4" /> Start Recording
-            </Button>
-          )}
-          {/* <form action={handleAudioUpload}>
-            <Button disabled={isProcessing}>Create Story</Button>  0
-          </form> */}
-        </div>
-      </CardContent>
-      <CardFooter>
-        {isProcessing && (
-          <div className="flex items-center justify-center w-full">
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Processing your story...
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle>Tell Your Story</CardTitle>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="aspect-w-4 aspect-h-3 mb-4">
+            <img
+              src={imgSrc}
+              alt={"A child recording"}
+              className={cn(
+                "rounded-lg object-cover w-full h-full",
+                isProcessing !== "WAITING" ? "animate-pulse" : undefined
+              )}
+            />
           </div>
-        )}
-      </CardFooter>
-    </Card>
+        </CardContent>
+        <CardFooter>
+          <div className="flex items-center justify-center w-full">
+            {isProcessing === "WAITING" && (
+              <Button onClick={startRecording}>
+                <Mic className="mr-2 h-4 w-4" /> Record your story idea
+              </Button>
+            )}
+            {isProcessing === "RECORDING" && (
+              <Button onClick={stopRecording} variant="destructive">
+                <Square className="mr-2 h-4 w-4" /> Stop Recording
+              </Button>
+            )}
+            {isProcessing === "TRANSCRIBING" && (
+              <Button disabled>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Transcribing
+              </Button>
+            )}
+            {isProcessing === "STORY" && (
+              <Button disabled>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating
+                Story
+              </Button>
+            )}
+            {isProcessing === "ASSETS" && (
+              <Button disabled>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating
+                Images and Audio
+              </Button>
+            )}
+            {isProcessing === "DONE" && <Button>Done</Button>}
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }
