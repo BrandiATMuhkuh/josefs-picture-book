@@ -8,8 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import Image from "next/image"; // Import the Next.js Image component
 import { useEffect, useRef, useState } from "react";
 
 import { PictureBook } from "@/lib/types";
@@ -66,20 +66,22 @@ export function StoryDisplayComponent({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col items-center justify-center h-full bg-gray-100 p-4">
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle>{paragraphs.title}</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="aspect-w-4 aspect-h-3 mb-4">
-            <img
+            <Image
               src={`data:image/png;base64,${paragraphs.pages[currentPage].image64}`}
               alt={`Story illustration ${currentPage + 1}`}
               className="rounded-lg object-cover w-full h-full"
+              width={300}
+              height={300}
             />
           </div>
-          <p className="text-lg text-center mb-4">
+          <p className="text-base md:text-lg text-center mb-4">
             {paragraphs.pages[currentPage].text}
           </p>
         </CardContent>
@@ -89,20 +91,9 @@ export function StoryDisplayComponent({
             disabled={currentPage === 0 || isAutoPlaying}
             variant="outline"
           >
-            <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+            <ChevronLeft className="mr-2 h-4 w-4" />
           </Button>
           <div className="flex items-center justify-center space-x-2">
-            <Switch
-              id="auto-play"
-              checked={isAutoPlaying}
-              onCheckedChange={toggleAutoPlay}
-            />
-            <label
-              htmlFor="auto-play"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Auto-play
-            </label>
             <Button
               onClick={toggleAutoPlay}
               variant="outline"
@@ -124,7 +115,7 @@ export function StoryDisplayComponent({
             }
             variant="outline"
           >
-            Next <ChevronRight className="ml-2 h-4 w-4" />
+            <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         </CardFooter>
       </Card>

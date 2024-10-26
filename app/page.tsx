@@ -4,6 +4,7 @@ import { VoiceRecorderComponent } from "@/components/voice-recorder";
 import { PictureBook } from "@/lib/types";
 import { useState } from "react";
 
+// import debugStory from "@/components/debugStory";
 import { z } from "zod";
 
 export default function Home() {
