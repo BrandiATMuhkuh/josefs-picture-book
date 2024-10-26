@@ -93,7 +93,6 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
     formData.append("file", audioBlob, "audio.wav");
     const text = await speechToText(formData);
     console.log("Transcribed Text", text);
-
     setIsProcessing("STORY");
     // make request to backend with mock data for now
     const storyBook = await textToStory(text, 3);
