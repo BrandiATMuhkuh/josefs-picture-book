@@ -87,14 +87,6 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
     const images64 = await Promise.all(ps);
     const audio64 = await Promise.all(ps3);
 
-    // const [images64, audio64] = await Promise.all([
-    //   Promise.all(
-    //     pictureBook.pages.map((page) => pageToImage(storyBook, page))
-    //   ),
-
-    //   Promise.all(pictureBook.pages.map((page) => pageToAudio(page))),
-    // ]);
-
     for (let i = 0; i < pictureBook.pages.length; i = i + 1) {
       pictureBook.pages[i].image64 = images64[i];
       pictureBook.pages[i].audio64 = audio64[i];
@@ -127,7 +119,7 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
             </Button>
           )}
           {/* <form action={handleAudioUpload}>
-            <Button disabled={isProcessing}>Create Story</Button>
+            <Button disabled={isProcessing}>Create Story</Button>  0
           </form> */}
         </div>
       </CardContent>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -73,27 +73,15 @@ export function StoryDisplayComponent({
           <p className="text-lg text-center mb-4">
             {paragraphs.pages[currentPage].text}
           </p>
-          <div className="flex justify-between items-center mb-4">
-            <Button
-              onClick={goToPreviousPage}
-              disabled={currentPage === 0 || isAutoPlaying}
-              variant="outline"
-            >
-              <ChevronLeft className="mr-2 h-4 w-4" /> Previous
-            </Button>
-            <span className="text-sm text-gray-500">
-              Page {currentPage + 1} of {paragraphs.pages.length}
-            </span>
-            <Button
-              onClick={goToNextPage}
-              disabled={
-                currentPage === paragraphs.pages.length - 1 || isAutoPlaying
-              }
-              variant="outline"
-            >
-              Next <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between items-center mb-4">
+          <Button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 0 || isAutoPlaying}
+            variant="outline"
+          >
+            <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+          </Button>
           <div className="flex items-center justify-center space-x-2">
             <Switch
               id="auto-play"
@@ -120,7 +108,16 @@ export function StoryDisplayComponent({
               )}
             </Button>
           </div>
-        </CardContent>
+          <Button
+            onClick={goToNextPage}
+            disabled={
+              currentPage === paragraphs.pages.length - 1 || isAutoPlaying
+            }
+            variant="outline"
+          >
+            Next <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );
