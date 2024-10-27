@@ -65,13 +65,11 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
 
     // make sure people can only recording for 10 seconds
     setTimeout(() => {
-      console.log("timeout");
       if (mediaRecorderRef.current?.state === "recording") {
         stopRecording();
       }
     }, 10000);
 
-    // setIsRecording(true);
     setState("RECORDING");
   };
 
@@ -95,31 +93,11 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
     console.log("Transcribed Text", text);
     setState("STORY");
     // make request to backend with mock data for now
-    const storyBook = await textToStory(text, 3);
+    const storyBook = await textToStory(text, 5);
     console.log("story", storyBook);
 
     setState("ASSETS");
     const pictureBook = await storyToPictureBook(PictureBook.parse(storyBook));
-
-    // const pictureBook = PictureBook.parse(storyBook);
-
-    // const ps: Promise<string>[] = [];
-    // const ps3: Promise<string>[] = [];
-    // for (const page of pictureBook.pages) {
-    //   console.log("start the loop");
-    //   ps.push(pageToImage(storyBook, page));
-    //   console.log("create image", page.pageNumber);
-    //   ps3.push(pageToAudio(page));
-    //   console.log("create image", page.pageNumber);
-    // }
-
-    // const images64 = await Promise.all(ps);
-    // const audio64 = await Promise.all(ps3);
-
-    // for (let i = 0; i < pictureBook.pages.length; i = i + 1) {
-    //   pictureBook.pages[i].image64 = images64[i];
-    //   pictureBook.pages[i].audio64 = audio64[i];
-    // }
     setState("DONE");
     onPictureBook(pictureBook);
   };

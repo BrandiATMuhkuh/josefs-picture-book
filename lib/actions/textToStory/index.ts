@@ -23,8 +23,9 @@ You will get from the user a story line.
 
 Your job is the following:
 - Create a child story
-- Create about ${nrOfParagraphs} paragraph
-- For each paragraph create a description of how an image for it should look like. This description will be adding into a Generative AI to create comic images.
+- Create about ${nrOfParagraphs} paragraph (page texts)
+- For each paragraph/page create a description of how an image for it should look like. This description will be adding into a Generative AI to create comic images.
+- Please indicate the story is over in a nice way
 
 Please output everything as json`,
           },
