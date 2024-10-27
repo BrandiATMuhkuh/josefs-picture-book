@@ -40,16 +40,6 @@ export default function RootLayout({
           <footer className="bg-white shadow-sm fixed bottom-0 left-0 right-0">
             <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
               <p className="text-center text-sm text-gray-500">
-                Made with love for Josef ❤️ | By{" "}
-                <a
-                  href="https://brandstetter.io/Resume_Brandstetter_Jurgen.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline"
-                >
-                  Jurgen Brandstetter
-                </a>{" "}
-                |
                 <a
                   href="https://www.linkedin.com/in/j-brandstetter/"
                   target="_blank"
@@ -58,6 +48,15 @@ export default function RootLayout({
                 >
                   Open to Work
                 </a>
+                | Made with love for Josef ❤️ | By{" "}
+                <a
+                  href="https://brandstetter.io/Resume_Brandstetter_Jurgen.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Jurgen Brandstetter
+                </a>{" "}
                 |{" "}
                 <a
                   href="https://github.com/BrandiATMuhkuh/josefs-picture-book"
