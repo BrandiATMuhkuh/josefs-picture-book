@@ -1,7 +1,7 @@
 # Josef's Picture Book
 
 > [!NOTE]  
-> This project is intended to allow children who can't read/write (~5 years old) to create picture books by simply recording a story idea. Try it: https://josefs-picture-book.vercel.app/
+> This project is intended to allow children who can't read/write (~5 years old) to create picture books by simply recording a story idea. Try it: https://josefs-picture-book.brandstetter.io
 
 ## Inspiration
 
