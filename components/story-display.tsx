@@ -72,7 +72,8 @@ export function StoryDisplayComponent({
           <CardTitle>{paragraphs.title}</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="aspect-w-4 aspect-h-3 mb-4">
+          <div className="relative w-full aspect-auto sm:aspect-[10/8]">
+            {" "}
             <Image
               src={`data:image/png;base64,${paragraphs.pages[currentPage].image64}`}
               alt={`Story illustration ${currentPage + 1}`}
@@ -81,7 +82,7 @@ export function StoryDisplayComponent({
               height={300}
             />
           </div>
-          <p className="text-base md:text-lg text-center mb-4">
+          <p className="text-base md:text-lg text-left mb-4 mt-4">
             {paragraphs.pages[currentPage].text}
           </p>
         </CardContent>
