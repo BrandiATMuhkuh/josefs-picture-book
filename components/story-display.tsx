@@ -67,55 +67,64 @@ export function StoryDisplayComponent({
 
   return (
     <div className="flex flex-col items-center justify-center h-full bg-gray-100 p-4">
-      <Card className="w-full max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle>{paragraphs.title}</CardTitle>
+      <Card className="w-full max-w-2xl mx-auto border-4 border-dashed border-purple-400 bg-white rounded-3xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-center text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+            {paragraphs.title} ✨
+          </CardTitle>
         </CardHeader>
-        <CardContent className="p-6">
-          <div className="relative w-full aspect-auto sm:aspect-[10/8]">
+        <CardContent className="p-8">
+          <div className="relative aspect-w-4 aspect-h-3 mb-6">
+            <div className="absolute -inset-4">
+              <div className="w-full h-full rotate-2 bg-yellow-200 rounded-2xl" />
+            </div>
+            <div className="absolute -inset-4">
+              <div className="w-full h-full -rotate-2 bg-blue-200 rounded-2xl" />
+            </div>
             <Image
               src={`data:image/png;base64,${paragraphs.pages[currentPage].image64}`}
               alt={`Story illustration ${currentPage + 1}`}
-              className="rounded-lg object-cover w-full h-full"
+              className="relative rounded-2xl object-cover w-full h-full border-4 border-white shadow-xl transform hover:rotate-2 transition-transform duration-300"
               width={300}
               height={300}
             />
           </div>
-          <p className="text-base md:text-lg text-center mb-4 mt-4">
+          <p className="text-xl text-center mb-4 mt-8 px-6 py-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl shadow-inner border-2 border-purple-100 font-medium text-gray-700">
             {paragraphs.pages[currentPage].text}
           </p>
         </CardContent>
-        <CardFooter className="flex justify-between items-center mb-4">
+        <CardFooter className="pb-8 flex justify-between items-center px-8">
           <Button
             onClick={goToPreviousPage}
             disabled={currentPage === 0 || isAutoPlaying}
-            variant="outline"
+            className="bg-gradient-to-r from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600 text-white rounded-full px-6 py-6 text-lg font-bold shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50"
           >
-            <ChevronLeft className="mr-2 h-4 w-4" />
+            <ChevronLeft className="h-6 w-6" />
           </Button>
-          <div className="flex items-center justify-center space-x-2">
-            <Button
-              onClick={toggleAutoPlay}
-              variant="outline"
-              size="icon"
-              className="ml-2"
-              aria-label={isAutoPlaying ? "Pause auto-play" : "Start auto-play"}
-            >
-              {isAutoPlaying ? (
-                <Pause className="h-4 w-4" />
-              ) : (
-                <Play className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
+
+          <Button
+            onClick={toggleAutoPlay}
+            className="bg-gradient-to-r from-pink-400 to-purple-500 hover:from-pink-500 hover:to-purple-600 text-white rounded-full px-8 py-6 text-lg font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+          >
+            {isAutoPlaying ? (
+              <>
+                <Pause className="mr-2 h-6 w-6" /> Pause Story 🎵
+              </>
+            ) : (
+              <>
+                <Play className="mr-2 h-6 w-6" /> Read to Me! 🎵
+              </>
+            )}
+          </Button>
+
           <Button
             onClick={goToNextPage}
             disabled={
               currentPage === paragraphs.pages.length - 1 || isAutoPlaying
             }
-            variant="outline"
+            className="bg-gradient-to-r from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600 text-white rounded-full px-6 py-6 text-lg font-bold shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50"
           >
-            <ChevronRight className="ml-2 h-4 w-4" />
+            <ChevronRight className="h-6 w-6" />
           </Button>
         </CardFooter>
       </Card>

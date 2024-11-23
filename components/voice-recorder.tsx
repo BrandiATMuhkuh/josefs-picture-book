@@ -104,52 +104,84 @@ export function VoiceRecorderComponent({ onPictureBook }: props) {
 
   return (
     <div className="flex flex-col items-center justify-center h-full bg-gray-100 p-4">
-      <Card className="w-full max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle>Tell Your Story</CardTitle>
+      <Card className="w-full max-w-2xl mx-auto border-4 border-dashed border-purple-400 bg-white rounded-3xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-center text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+            Tell Me Your Magical Story! ✨
+          </CardTitle>
         </CardHeader>
-        <CardContent className="p-6">
-          <div className="aspect-w-4 aspect-h-3 mb-4">
+        <CardContent className="p-8">
+          <div className="relative aspect-w-4 aspect-h-3 mb-6">
+            <div className="absolute -inset-4">
+              <div className="w-full h-full rotate-2 bg-yellow-200 rounded-2xl" />
+            </div>
+            <div className="absolute -inset-4">
+              <div className="w-full h-full -rotate-2 bg-blue-200 rounded-2xl" />
+            </div>
             <Image
               src={imgSrc}
-              alt={"A child recording"}
+              alt="A child recording"
               className={cn(
-                "rounded-lg object-cover w-full h-full",
-                state !== "WAITING" ? "animate-pulse" : undefined
+                "relative rounded-2xl object-cover w-full h-full border-4 border-white shadow-xl",
+                state !== "WAITING"
+                  ? "animate-bounce"
+                  : "transform hover:rotate-2 transition-transform duration-300"
               )}
             />
           </div>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="pb-8">
           <div className="flex items-center justify-center w-full">
             {state === "WAITING" && (
-              <Button onClick={startRecording}>
-                <Mic className="mr-2 h-4 w-4" /> Record your story idea
+              <Button
+                onClick={startRecording}
+                className="bg-gradient-to-r from-pink-400 to-purple-500 hover:from-pink-500 hover:to-purple-600 text-white rounded-full px-8 py-6 text-lg font-bold shadow-lg transform hover:scale-105 transition-all  animate-pulse"
+              >
+                <Mic className="mr-3 h-6 w-6" /> Let&apos;s Record Your Story!
+                🎤
               </Button>
             )}
             {state === "RECORDING" && (
-              <Button onClick={stopRecording} variant="destructive">
-                <Square className="mr-2 h-4 w-4" /> Stop Recording
+              <Button
+                onClick={stopRecording}
+                variant="destructive"
+                className="bg-gradient-to-r from-red-400 to-orange-500 hover:from-red-500 hover:to-orange-600 rounded-full px-8 py-6 text-lg font-bold shadow-lg transform hover:scale-105 transition-all duration-200 animate-bounce"
+              >
+                <Square className="mr-3 h-6 w-6" /> All Done? Stop Recording! 🎯
               </Button>
             )}
             {state === "TRANSCRIBING" && (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Transcribing
+              <Button
+                disabled
+                className="bg-gradient-to-r from-blue-400 to-teal-500 rounded-full px-8 py-6 text-lg font-bold"
+              >
+                <Loader2 className="mr-3 h-6 w-6 animate-spin" /> Writing Down
+                Your Story... ✍️
               </Button>
             )}
             {state === "STORY" && (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating
-                Story
+              <Button
+                disabled
+                className="bg-gradient-to-r from-green-400 to-emerald-500 rounded-full px-8 py-6 text-lg font-bold"
+              >
+                <Loader2 className="mr-3 h-6 w-6 animate-spin" /> Making Story
+                Magic! 🪄
               </Button>
             )}
             {state === "ASSETS" && (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating
-                Images and Audio
+              <Button
+                disabled
+                className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full px-8 py-6 text-lg font-bold"
+              >
+                <Loader2 className="mr-3 h-6 w-6 animate-spin" /> Drawing
+                Pictures! 🎨
               </Button>
             )}
-            {state === "DONE" && <Button>Done</Button>}
+            {state === "DONE" && (
+              <Button className="bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-500 hover:to-emerald-600 rounded-full px-8 py-6 text-lg font-bold shadow-lg transform hover:scale-105 transition-all duration-200">
+                Hooray! All Done! 🎉
+              </Button>
+            )}
           </div>
         </CardFooter>
       </Card>
